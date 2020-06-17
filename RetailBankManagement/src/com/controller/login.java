@@ -1,7 +1,7 @@
 package com.controller;
 
 import java.io.IOException;
-import java.sql.Connection;
+//import java.sql.Connection;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.dao.dbManager;
+//import com.dao.dbManager;
 
 /**
  * Servlet implementation class login
@@ -28,36 +28,56 @@ public class login extends HttpServlet
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
 		
-		dbManager db = new dbManager();
-		try {
-			Connection conn = db.getConnection();
-			if(conn != null)
-			{
-				String uname = request.getParameter("uname");
-				String pass = request.getParameter("pass");
-			
-				if(uname.equals("admin") && pass.equals("admin"))
-				{
-					HttpSession session = request.getSession();
-					session.setAttribute("UserName",uname);
-					response.sendRedirect("welcome.jsp");
-				}
-				else
-				{
-					response.sendRedirect("login.jsp");
-				}
-			}
-		} 
-		catch (ClassNotFoundException e)
+		
+		String uname = request.getParameter("uname");
+	    String pass = request.getParameter("pass");
+	
+	   
+	    
+		if(uname.equals("admin") && pass.equals("admin"))
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			 System.out.print("Welcome, "+uname);  
+			HttpSession session = request.getSession();
+			session.setAttribute("UserName",uname);	
+			
+			response.sendRedirect("welcome.jsp");
+		}
+		else
+		{
+			 System.out.print("Sorry, username or password incorrect!");  
+			//response.getRe("login.jsp");
+			 //response.getRe
 		}
 		
-		
-		
-		
 	}
-
-
 }
+		
+		
+//		dbManager db = new dbManager();
+//		try {
+//			Connection conn = db.getConnection();
+//			if(conn != null)
+//			{
+//				String uname = request.getParameter("uname");
+//				String pass = request.getParameter("pass");
+//			
+//				if(uname.equals("admin") && pass.equals("admin"))
+//				{
+//					HttpSession session = request.getSession();
+//					session.setAttribute("UserName",uname);
+//					
+//					response.sendRedirect("welcome.jsp");
+//				}
+//				else
+//				{
+//					response.sendRedirect("login.jsp");
+//				}
+//			}
+//		} 
+//		catch (ClassNotFoundException e)
+//		{
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+		

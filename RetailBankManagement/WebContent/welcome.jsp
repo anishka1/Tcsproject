@@ -13,7 +13,7 @@
 			response.sendRedirect("login.jsp");
 		}
 	%>
- welcome ${uname}
+ welcome ${UserName}
  
  <form action = "logout">
  <input type = "submit" value="logout">
