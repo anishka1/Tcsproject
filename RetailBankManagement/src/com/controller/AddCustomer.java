@@ -1,7 +1,13 @@
 package com.controller;
+
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,19 +16,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.bms.connection.Connector;
-
 /**
- * Servlet implementation class Login
+ * Servlet implementation class AddCustomer
  */
-@WebServlet("/Login")
-public class Login extends HttpServlet {
+@WebServlet("/AddCustomer")
+public class AddCustomer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public Login() {
+	public AddCustomer() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -45,9 +49,17 @@ public class Login extends HttpServlet {
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
-		String name = request.getParameter("username");
-		String pass = request.getParameter("password");
+		String ssn_id = request.getParameter("customerssn");
+		String cust_id = request.getParameter("cust_id");
+		String name = request.getParameter("firstname").concat(" " + request.getParameter("lastname"));
+		String age = request.getParameter("age");
+		String address_line1 = request.getParameter("addressline1");
+		String address_line2 = request.getParameter("addressline2");
+		String city = request.getParameter("city1");
+		String state = request.getParameter("state1");
+		String address = address_line1 + " " + address_line2 + " " + city + " " + state;
 		Connection cn = null;
+
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			cn = DriverManager.getConnection("jdbc:mysql://localhost:3306/retailbank", "root", "");
@@ -60,24 +72,22 @@ public class Login extends HttpServlet {
 		PrintWriter out = response.getWriter();
 
 		try {
-			Statement st = cn.createStatement();
-			ResultSet rs = st.executeQuery(
-					"select login,password from userstore where login='" + name + "'and password='" + pass + "'");
-			if (rs.next()) {
-				if (rs.getString("login").equals(name) && rs.getString("password").equals(pass)) {
-					response.sendRedirect("home.jsp");
-					HttpSession session = request.getSession();
-					session.setAttribute("name", name);
-				} else {
-					out.println("Wrong id and password");
-				}
-			} else {
-				out.println("Wrong id and password");
-			}
+			String sql = "insert into customer values(?,?,?,?,?)";
+			PreparedStatement stmt = cn.prepareStatement(sql);
+			stmt.setString(1, ssn_id);
+			stmt.setString(2, cust_id);
+			stmt.setString(3, name);
+			stmt.setString(4, address);
+			stmt.setString(5, age);
+
+			stmt.executeUpdate();
+			out.println("registration succefully...!");
+			response.sendRedirect("home.jsp");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 
 		}
 	}
+
 }
